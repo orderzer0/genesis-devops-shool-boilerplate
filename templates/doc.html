@@ -1,0 +1,59 @@
+<h1>API Documentation</h1>
+<div>
+    <h2>Get all students list</h2>
+    <h4>Return in responce all students from DataBase</h4>
+    <p>Method '/api/students'</p>
+    <p>Type : GET</p>
+</div>
+<div>
+    <h2>Get student by ID</h2>
+    <h4>Return in responce student with such ID from DataBase</h4>
+    <p>Method '/api/students/get/{id}'</p>
+    <p>Type : GET</p>
+</div>
+<div>
+    <h2>Create new student in DataBase</h2>
+    <h4>Create new student with values from request body in DataBase</h4>
+    <p>Method '/api/students/add'</p>
+    <p>Type : POST</p>
+    <p>Request Body : <br>{<br>name:String,<br>email:String,<br>age:String,<br>cellphone:String<br>}</p>
+    <p>Responce Body : <br>{<br>name:String,<br>email:String,<br>age:String,<br>id:String,<br>cellphone:String<br>}</p>
+</div>
+<div>
+    <h2>Modify student with such ID</h2>
+    <h4>Modify student with values from request body in DataBase</h4>
+    <p>Method '/api/students/modify/{id}'</p>
+    <p>Type : PUTCH</p>
+    <p>Request Body : <br>{<br>name:String (optional)
+        ,<br>email:String (optional),<br>age:String (optional),<br>cellphone:String (optional)<br>}</p>
+    <p>Responce Body : <br>{<br>name:String,<br>email:String,<br>age:String,<br>id:String,<br>cellphone:String<br>}</p>
+</div>
+<div>
+    <h2>Change all student`s data with such ID</h2>    
+    <h4>Change all student`s data with values from request body in DataBase</h4>
+    <p>Method '/api/students/change/{id}'</p>
+    <p>Type : PUT</p>
+    <p>Request Body : <br>{<br>name:String,<br>email:String,<br>age:String,<br>cellphone:String<br>}</p>
+    <p>Responce Body : <br>{<br>name:String,<br>email:String,<br>age:String,<br>id:String,<br>cellphone:String<br>}</p>
+    <p>Change all student`s data with values from request body in DataBase</p>
+</div>
+<div>
+    <h2>Delete student by ID</h2>
+    <h4>Delete student with such ID from DataBase</h4>
+    <p>Method '/api/deleteStudent/{id}'</p>
+    <p>Type : DELETE</p>
+</div>
+
+<div>
+    <h2>GET STATUSE CODE 200</h2>
+    <h4>Return statuse code 200</h4>
+    <p>Method /api/health-check/ok'</p>
+    <p>Type : GET</p>
+</div>
+
+<div>
+    <h2>GET STATUSE CODE 500</h2>
+    <h4>Return statuse code 500</h4>
+    <p>Method /api/health-check/bad'</p>
+    <p>Type : GET</p>
+</div>
