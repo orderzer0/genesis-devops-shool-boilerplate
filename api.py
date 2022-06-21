@@ -1,6 +1,7 @@
 import os
+from queue import Empty
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 from flask_sqlalchemy import SQLAlchemy
 import dotenv
 from sqlalchemy import create_engine
@@ -58,11 +59,11 @@ student_schema = StudentSchema
 
 @app.route('/', methods = ['GET'])
 def home():
-    return '<p>Hello from students API!</p>', 200
+    return jsonify('<p>Hello from students API!</p>'), 200
 
 @app.route('/api', methods = ['GET'])
 def api_main():
-    return jsonify('Hello, World!'), 200
+    return render_template('doc.html'), 200
 
 @app.route('/api/students', methods=['GET'])
 def get_all_students():
@@ -92,6 +93,80 @@ def add_student():
     data = serializer.dump(new_student)
     return jsonify(data), 201
 
+@app.route('/api/students/modify/<int:id>', methods = ['PATCH'])
+def modify_student(id):
+    student = Student.get_by_id(id)
+    
+    student_json = request.get_json()
+    stud_name = student_json.get('name'),
+    stud_email = student_json.get('email'),
+    stud_age = student_json.get('age'),
+    stud_cellphone = student_json.get('cellphone')
+
+    if 'name' in student_json:
+        student.name = stud_name
+    if 'email' in student_json:
+        student.email = stud_email
+    if 'age' in student_json:
+        student.age = stud_age
+    if 'cellphone' in student_json:
+        student.cellphone = stud_cellphone
+    try:
+        student.save()
+        serializer = StudentSchema()
+        data = serializer.dump(student)
+        return jsonify(data), 200
+    except Exception as e:
+        print(e)
+        return 304 #jsonify(error="Something go wrong")
+
+@app.route('/api/students/change/<int:id>', methods = ['PUT'])
+def change_student(id):
+    student = Student.get_by_id(id)
+    
+    student_json = request.get_json()
+    stud_name = student_json.get('name'),
+    stud_email = student_json.get('email'),
+    stud_age = student_json.get('age'),
+    stud_cellphone = student_json.get('cellphone')
+
+    #check that get all nessesery fields 
+    if 'name' in student_json and 'email' in student_json and 'age' in student_json and 'cellphone' in student_json:
+        student.name = stud_name
+        student.email = stud_email
+        student.age = stud_age
+        student.cellphone = stud_cellphone
+    else:
+        return jsonify(responce='You need input all data fields '+
+        '{name,email,age,cellphone}')
+    try:
+        student.save()
+        serializer = StudentSchema()
+        data = serializer.dump(student)
+        return jsonify(data), 200
+    except Exception as e:
+        print(e)
+        return 304 #jsonify(error="Something go wrong")
+
+@app.route('/api/deleteStudent/<int:id>', methods = ['DELETE'])
+def delete_student(id):
+    try:
+        student = Student.get_by_id(id)
+        student.delete()
+    except Exception as e:
+        print(e)
+        return 304
+    return jsonify(response="Student was deleted"), 200
+
+@app.route('/api/health-check/ok', methods = ['GET'])
+def health_check_ok():
+    return jsonify(response="All`s OK"), 200
+
+@app.route('/api/health-check/bad', methods = ['GET'])
+def health_check_bad():
+    return jsonify(response="It's just for testing, right?"), 500
+
+    
 if __name__ == '__main__':
     engine = create_engine(DB_URI, echo=True)
     if not database_exists(engine.url):
