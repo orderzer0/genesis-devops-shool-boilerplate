@@ -14,9 +14,8 @@ db_user = os.environ.get('DB_USERNAME')
 db_pass = os.environ.get('DB_PASSWORD')
 db_hostname = os.environ.get('DB_HOSTNAME')
 db_name = os.environ.get('DB_NAME')
-db_uri = os.environ.get('DB_URIID')
 
-DB_URI = db_uri #'mysql+pymysql://{db_username}:{db_password}@{db_host}/{database}'.format(db_username=db_user, db_password=db_pass, db_host=db_hostname, database=db_name)
+DB_URI = 'mysql+pymysql://{db_username}:{db_password}@{db_host}/{database}'.format(db_username=db_user, db_password=db_pass, db_host=db_hostname, database=db_name)
 
 engine = create_engine(DB_URI, echo=True)
 
