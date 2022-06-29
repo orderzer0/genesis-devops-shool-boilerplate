@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  app:
+    restart: always
+    image: api:check
+    ports:
+    - '8081:8081'
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+    - mysqlnet
+
+  db:
+      container_name: mydb
+      image: mysql:5.7
+      ports:
+      - 3307:3306
+      restart: always
+      environment:
+        MYSQL_USER: "root"
+        MYSQL_ROOT_PASSWORD: "password"
+        MYSQL_DATABASE: "pyth"
+        TZ: "UTC"
+        PGTZ: "UTC"
+      healthcheck:
+        test: ["CMD", "mysqladmin", "-uroot","-ppassword","ping", "-h", "127.0.0.1", "--silent"]
+        interval: 3s
+        retries: 5
+        start_period: 30s
+      volumes:
+      - mysql:/var/lib/mysql
+      networks:
+      - mysqlnet
+
+networks:
+  mysqlnet:
+    name: devops
+
+volumes:
+  mysql:
